@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Микаил Халиков](https://up.htmlacademy.ru/javascript/17/user/91943).
-* Наставник: `Неизвестно`.
+ * Наставник: [Магомед Кандаев](https://htmlacademy.ru/profile/magomedkandaev).
 
 ---
 
