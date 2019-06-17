@@ -49,15 +49,63 @@ var renderPhotoBlock = function (photoBlock) {
 };
 
 var renderPhotosList = function () {
-  var photoBank = getPhotoBank();
+  var photos = getPhotoBank();
   var pictureBlock = document.querySelector('.pictures');
   var fragment = document.createDocumentFragment();
 
-  photoBank.forEach(function (item) {
+  photos.forEach(function (item) {
     fragment.appendChild(renderPhotoBlock(item));
   });
 
   pictureBlock.appendChild(fragment);
 };
+
+var uploadFile = document.querySelector('#upload-file');
+var imageEditorForm = document.querySelector('.img-upload__overlay');
+var cancelUploadFile = document.querySelector('#upload-cancel');
+var imagePreview = document.querySelector('.img-upload__preview');
+var imageToEdit = imagePreview.querySelector('img');
+var effects = document.querySelector('.effects');
+// var effectLevelValue = document.querySelector('[name="effect-level"]');
+var effectsRadioList = effects.querySelectorAll('.effects__radio');
+// var effectLevelLine = document.querySelector('.effect-level__line');
+// var effectLevelPin = effectLevelLine.querySelector('.effect-level__pin');
+// var effectLevelDepth = document.querySelector('.effect-level__depth');
+
+uploadFile.addEventListener('change', function () {
+  imageEditorForm.classList.remove('hidden');
+});
+
+cancelUploadFile.addEventListener('click', function () {
+  imageEditorForm.classList.add('hidden');
+  // uploadFile.value.reset;
+});
+
+// накладывает эфект на изображение
+effectsRadioList.forEach(function (effectInput) {
+  effectInput.addEventListener('change', function () {
+    if (effectInput.checked === true && effectInput.value === 'chrome') {
+      imageToEdit.classList.add('effects__preview--chrome');
+    } else if (effectInput.checked === true && effectInput.value === 'sepia') {
+      imageToEdit.classList.add('effects__preview--sepia');
+    } else if (effectInput.checked === true && effectInput.value === 'marvin') {
+      imageToEdit.classList.add('effects__preview--marvin');
+    } else if (effectInput.checked === true && effectInput.value === 'phobos') {
+      imageToEdit.classList.add('effects__preview--phobos');
+    } else if (effectInput.checked === true && effectInput.value === 'heat') {
+      imageToEdit.classList.add('effects__preview--heat');
+    } else {
+      imageToEdit.classListadd.add('');
+    }
+  });
+});
+
+// расчет положения пина относительно всего блока
+// effectLevelLine.offsetWidth; // длина всего блока 100% эффекта
+// effectLevelPin.offsetLeft; // положение пина от левого края
+
+// изменяет насыщенность эффекта на изображении
+// effectLevelPin.addEventListener('mouseup', function () {
+// });
 
 renderPhotosList();
