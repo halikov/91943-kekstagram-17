@@ -60,17 +60,19 @@ var renderPhotosList = function () {
   pictureBlock.appendChild(fragment);
 };
 
+renderPhotosList();
+
 var uploadFile = document.querySelector('#upload-file');
 var imageEditorForm = document.querySelector('.img-upload__overlay');
 var cancelUploadFile = document.querySelector('#upload-cancel');
 var imagePreview = document.querySelector('.img-upload__preview');
 var imageToEdit = imagePreview.querySelector('img');
 var effects = document.querySelector('.effects');
-// var effectLevelValue = document.querySelector('[name="effect-level"]');
+var effectLevelValue = document.querySelector('.effect-level__value');
 var effectsRadioList = effects.querySelectorAll('.effects__radio');
-// var effectLevelLine = document.querySelector('.effect-level__line');
-// var effectLevelPin = effectLevelLine.querySelector('.effect-level__pin');
-// var effectLevelDepth = document.querySelector('.effect-level__depth');
+var effectLevelLine = document.querySelector('.effect-level__line');
+var effectLevelPin = effectLevelLine.querySelector('.effect-level__pin');
+var effectLevelDepth = document.querySelector('.effect-level__depth');
 
 uploadFile.addEventListener('change', function () {
   imageEditorForm.classList.remove('hidden');
@@ -100,12 +102,29 @@ effectsRadioList.forEach(function (effectInput) {
   });
 });
 
-// расчет положения пина относительно всего блока
-// effectLevelLine.offsetWidth; // длина всего блока 100% эффекта
-// effectLevelPin.offsetLeft; // положение пина от левого края
+
+//  после отпускания кнопки мыши изменяется value в effect-level__value
+effectLevelPin.addEventListener('mouseup', function () {
+  effectLevelValue.value = 100;
+  effectLevelDepth.width = 100;
+});
 
 // изменяет насыщенность эффекта на изображении
-// effectLevelPin.addEventListener('mouseup', function () {
-// });
+effectsRadioList.forEach(function (effectInput) {
+  effectLevelValue.addEventListener('change', function () {
+    if (effectInput.value === 'chrome') {
+      imagePreview.filter = 'grayscale(1)';
+    } else if (effectInput.value === 'sepia') {
+      imagePreview.filter = 'sepia(1)';
+    } else if (effectInput.value === 'marvin') {
+      imagePreview.filter = 'invert(100%)';
+    } else if (effectInput.value === 'phobos') {
+      imagePreview.filter = 'blur(3px)';
+    } else if (effectInput.value === 'heat') {
+      imagePreview.filter = 'brightness(3)';
+    } else {
+      imagePreview.filter = '';
+    }
+  });
+});
 
-renderPhotosList();
