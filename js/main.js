@@ -68,21 +68,29 @@ var cancelUploadFile = document.querySelector('#upload-cancel');
 var imagePreview = document.querySelector('.img-upload__preview');
 var imageToEdit = imagePreview.querySelector('img');
 var effects = document.querySelector('.effects');
-// var effectsItemList = effects.querySelectorAll('.effects__item');
 var effectLevelValue = document.querySelector('.effect-level__value');
 var effectsRadioList = effects.querySelectorAll('.effects__radio');
 var effectLevelLine = document.querySelector('.effect-level__line');
 var effectLevelPin = effectLevelLine.querySelector('.effect-level__pin');
 var effectLevelDepth = document.querySelector('.effect-level__depth');
 
-uploadFile.addEventListener('change', function () {
+// открытие формы редактора
+var onUploadChange = function () {
   imageEditorForm.classList.remove('hidden');
-});
+};
 
-cancelUploadFile.addEventListener('click', function () {
+// закрытие формы редактора
+var onFormClose = function () {
   imageEditorForm.classList.add('hidden');
-  // uploadFile.value.reset;
-});
+  // удаляет выбранный эффект к картинке
+  effects.removeEventListener('click', onEffectClick);
+};
+
+// listener для открытия формы редактора
+uploadFile.addEventListener('change', onUploadChange);
+
+// listener Для зактрытия формы редактора
+cancelUploadFile.addEventListener('click', onFormClose);
 
 // накладывает эфект на изображение
 // выводим value выбранного эффекта
@@ -97,10 +105,13 @@ var onEffectCheck = function () {
   return checkedEffectInput.value;
 };
 
-// применяем выбраный эффект к картинке добавлением к названию класса value эффекта
-effects.addEventListener('click', function () {
+// формирует название класса картинки для применения эффекта
+var onEffectClick = function () {
   imageToEdit.className = 'effects__preview--' + onEffectCheck();
-});
+};
+
+// применяем выбраный эффект к картинке добавлением к названию класса value эффекта
+effects.addEventListener('click', onEffectClick);
 
 // вычисление координты ползунка
 var getPinPosition = function (pin) {
@@ -126,7 +137,7 @@ var setEffectsLevelValue = function () {
 var inputEffectValue = setEffectsLevelValue();
 
 // расчет значения для effect-level__value.value координата левой точки ползунка + половина ползунка
-var effectValue = Math.floor(inputEffectValue.left + effectLevelPin / 2);
+var effectValue = inputEffectValue.left;
 
 //  после отпускания кнопки мыши изменяется value в effect-level__value
 effectLevelPin.addEventListener('mouseup', function () {
@@ -135,20 +146,20 @@ effectLevelPin.addEventListener('mouseup', function () {
 });
 
 // изменяет насыщенность эффекта на изображении
-// effectsRadioList.forEach(function (effectInput) {
-//   effectLevelValue.addEventListener('change', function () {
-//     if (effectInput.value === 'chrome') {
-//       imagePreview.style.filter = 'grayscale(0%)';
-//     } else if (effectInput.value === 'sepia') {
-//       imagePreview.style.filter = 'sepia(0%)';
-//     } else if (effectInput.value === 'marvin') {
-//       imagePreview.style.filter = 'invert(0%)';
-//     } else if (effectInput.value === 'phobos') {
-//       imagePreview.style.filter = 'blur(0px)';
-//     } else if (effectInput.value === 'heat') {
-//       imagePreview.style.filter = 'brightness(1%)';
-//     } else {
-//       imagePreview.style.filter = '';
-//     }
-//   });
-// });
+effectsRadioList.forEach(function (effectInput) {
+  effectLevelValue.addEventListener('change', function () {
+    if (effectInput.value === 'chrome') {
+      imagePreview.style.filter = 'grayscale(0%)';
+    } else if (effectInput.value === 'sepia') {
+      imagePreview.style.filter = 'sepia(0%)';
+    } else if (effectInput.value === 'marvin') {
+      imagePreview.style.filter = 'invert(0%)';
+    } else if (effectInput.value === 'phobos') {
+      imagePreview.style.filter = 'blur(0px)';
+    } else if (effectInput.value === 'heat') {
+      imagePreview.style.filter = 'brightness(1%)';
+    } else {
+      imagePreview.style.filter = '';
+    }
+  });
+});
