@@ -68,6 +68,7 @@ var cancelUploadFile = document.querySelector('#upload-cancel');
 var imagePreview = document.querySelector('.img-upload__preview');
 var imageToEdit = imagePreview.querySelector('img');
 var effects = document.querySelector('.effects');
+// var effectsItemList = effects.querySelectorAll('.effects__item');
 var effectLevelValue = document.querySelector('.effect-level__value');
 var effectsRadioList = effects.querySelectorAll('.effects__radio');
 var effectLevelLine = document.querySelector('.effect-level__line');
@@ -84,47 +85,70 @@ cancelUploadFile.addEventListener('click', function () {
 });
 
 // накладывает эфект на изображение
-effectsRadioList.forEach(function (effectInput) {
-  effectInput.addEventListener('change', function () {
-    if (effectInput.checked === true && effectInput.value === 'chrome') {
-      imageToEdit.classList.add('effects__preview--chrome');
-    } else if (effectInput.checked === true && effectInput.value === 'sepia') {
-      imageToEdit.classList.add('effects__preview--sepia');
-    } else if (effectInput.checked === true && effectInput.value === 'marvin') {
-      imageToEdit.classList.add('effects__preview--marvin');
-    } else if (effectInput.checked === true && effectInput.value === 'phobos') {
-      imageToEdit.classList.add('effects__preview--phobos');
-    } else if (effectInput.checked === true && effectInput.value === 'heat') {
-      imageToEdit.classList.add('effects__preview--heat');
-    } else {
-      imageToEdit.classListadd.add('');
+// выводим value выбранного эффекта
+var onEffectCheck = function () {
+  for (var i = 0; i < effectsRadioList.length; i++) {
+    var effectInput = effectsRadioList[i];
+    var checkedEffectInput;
+    if (effectInput.checked === true) {
+      checkedEffectInput = effectInput;
     }
-  });
+  }
+  return checkedEffectInput.value;
+};
+
+// применяем выбраный эффект к картинке добавлением к названию класса value эффекта
+effects.addEventListener('click', function () {
+  imageToEdit.className = 'effects__preview--' + onEffectCheck();
 });
 
+// вычисление координты ползунка
+var getPinPosition = function (pin) {
+  var box = pin.getBoundingClientRect();
+
+  return {
+    top: box.top + pageYOffset,
+    left: box.left + pageXOffset
+  };
+};
+
+var pinPosition = getPinPosition(effectLevelPin);
+var pinPositionX = pinPosition.left;
+var pinPositionY = pinPosition.top;
+
+// передача координат ползунка инпуту
+var setEffectsLevelValue = function () {
+  return {
+    top: pinPositionY,
+    left: pinPositionX
+  };
+};
+var inputEffectValue = setEffectsLevelValue();
+
+// расчет значения для effect-level__value.value координата левой точки ползунка + половина ползунка
+var effectValue = Math.floor(inputEffectValue.left + effectLevelPin / 2);
 
 //  после отпускания кнопки мыши изменяется value в effect-level__value
 effectLevelPin.addEventListener('mouseup', function () {
-  effectLevelValue.value = 100;
-  effectLevelDepth.width = 100;
+  effectLevelValue.value = effectValue;
+  effectLevelDepth.width = effectValue;
 });
 
 // изменяет насыщенность эффекта на изображении
-effectsRadioList.forEach(function (effectInput) {
-  effectLevelValue.addEventListener('change', function () {
-    if (effectInput.value === 'chrome') {
-      imagePreview.filter = 'grayscale(1)';
-    } else if (effectInput.value === 'sepia') {
-      imagePreview.filter = 'sepia(1)';
-    } else if (effectInput.value === 'marvin') {
-      imagePreview.filter = 'invert(100%)';
-    } else if (effectInput.value === 'phobos') {
-      imagePreview.filter = 'blur(3px)';
-    } else if (effectInput.value === 'heat') {
-      imagePreview.filter = 'brightness(3)';
-    } else {
-      imagePreview.filter = '';
-    }
-  });
-});
-
+// effectsRadioList.forEach(function (effectInput) {
+//   effectLevelValue.addEventListener('change', function () {
+//     if (effectInput.value === 'chrome') {
+//       imagePreview.style.filter = 'grayscale(0%)';
+//     } else if (effectInput.value === 'sepia') {
+//       imagePreview.style.filter = 'sepia(0%)';
+//     } else if (effectInput.value === 'marvin') {
+//       imagePreview.style.filter = 'invert(0%)';
+//     } else if (effectInput.value === 'phobos') {
+//       imagePreview.style.filter = 'blur(0px)';
+//     } else if (effectInput.value === 'heat') {
+//       imagePreview.style.filter = 'brightness(1%)';
+//     } else {
+//       imagePreview.style.filter = '';
+//     }
+//   });
+// });
