@@ -4,6 +4,10 @@ var getRandom = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
+var getRandomIndex = function (someArray) {
+  return getRandom(0, (someArray.length - 1));
+};
+
 var getComments = function () {
   var names = ['Ivan', 'Marya', 'Mika', 'Яков', 'Анна', 'Соня', 'Федор'];
   var commentTexts = [
@@ -18,8 +22,8 @@ var getComments = function () {
   for (var j = 1; j <= 16; j++) {
     comments.push({
       avatar: 'img/avatar-' + j + '.svg',
-      message: commentTexts[getRandom(1, (commentTexts.length - 1))],
-      name: names[getRandom(1, (names.length - 1))]
+      message: commentTexts[getRandomIndex(commentTexts)],
+      name: names[getRandomIndex(names)]
     });
   }
 
@@ -68,11 +72,7 @@ var cancelUploadFile = document.querySelector('#upload-cancel');
 var imagePreview = document.querySelector('.img-upload__preview');
 var imageToEdit = imagePreview.querySelector('img');
 var effects = document.querySelector('.effects');
-var effectLevelValue = document.querySelector('.effect-level__value');
 var effectsRadioList = effects.querySelectorAll('.effects__radio');
-var effectLevelLine = document.querySelector('.effect-level__line');
-var effectLevelPin = effectLevelLine.querySelector('.effect-level__pin');
-var effectLevelDepth = document.querySelector('.effect-level__depth');
 
 // открытие формы редактора
 var onUploadChange = function () {
@@ -83,7 +83,7 @@ var onUploadChange = function () {
 var onFormClose = function () {
   imageEditorForm.classList.add('hidden');
   // удаляет выбранный эффект к картинке
-  effects.removeEventListener('click', onEffectClick);
+  effects.removeEventListener('click', onEffectChange);
 };
 
 // listener для открытия формы редактора
@@ -93,73 +93,77 @@ uploadFile.addEventListener('change', onUploadChange);
 cancelUploadFile.addEventListener('click', onFormClose);
 
 // накладывает эфект на изображение
-// выводим value выбранного эффекта
-var onEffectCheck = function () {
-  for (var i = 0; i < effectsRadioList.length; i++) {
-    var effectInput = effectsRadioList[i];
-    var checkedEffectInput;
-    if (effectInput.checked === true) {
-      checkedEffectInput = effectInput;
-    }
-  }
-  return checkedEffectInput.value;
-};
 
 // формирует название класса картинки для применения эффекта
-var onEffectClick = function () {
-  imageToEdit.className = 'effects__preview--' + onEffectCheck();
+var onEffectChange = function (evt) {
+  if (evt.target.name === 'effect') {
+    imageToEdit.className = 'effects__preview--' + evt.target.value;
+  }
 };
 
-// применяем выбраный эффект к картинке добавлением к названию класса value эффекта
-effects.addEventListener('click', onEffectClick);
+effects.addEventListener('change', onEffectChange);
 
-// вычисление координты ползунка
-var getPinPosition = function (pin) {
-  var box = pin.getBoundingClientRect();
+var scale = document.querySelector('.scale');
+var scaleQuantity = scale.querySelector('.scale__control--value');
+var minValue = 0;
+var maxValue = 100;
+var valueStep = 25;
+var defaultValue = maxValue;
 
-  return {
-    top: box.top + pageYOffset,
-    left: box.left + pageXOffset
-  };
+var onScaleBiggerClick = function (scaleValue) {
+  if (scaleValue >= minValue && scaleValue < maxValue) {
+    scaleValue += valueStep;
+  }
 };
 
-var pinPosition = getPinPosition(effectLevelPin);
-var pinPositionX = pinPosition.left;
-var pinPositionY = pinPosition.top;
-
-// передача координат ползунка инпуту
-var setEffectsLevelValue = function () {
-  return {
-    top: pinPositionY,
-    left: pinPositionX
-  };
+var onScaleSmallerClick = function (scaleValue) {
+  if (scaleValue > minValue && scaleValue <= maxValue) {
+    scaleValue -= valueStep;
+  }
 };
-var inputEffectValue = setEffectsLevelValue();
 
-// расчет значения для effect-level__value.value координата левой точки ползунка + половина ползунка
-var effectValue = inputEffectValue.left;
+var onScaleClick = function (evt) {
+  var lvlScale = defaultValue;
+  if (evt.target.className === 'scale__control--bigger') {
+    onScaleBiggerClick(lvlScale);
+  } else if (evt.target.className === 'scale__control--smaller') {
+    onScaleSmallerClick(lvlScale);
+  }
+  scaleQuantity.value = lvlScale + '%';
+};
 
-//  после отпускания кнопки мыши изменяется value в effect-level__value
-effectLevelPin.addEventListener('mouseup', function () {
-  effectLevelValue.value = effectValue;
-  effectLevelDepth.width = effectValue;
+scale.addEventListener('click', onScaleClick);
+
+var effectLevelPin = document.querySelector('.effect-level__pin');
+var effectLevelLine = document.querySelector('.effect-level__line');
+var effectLevel = document.querySelector('[name="effect-level"]'); // на случай если понадобится при определении уровней фильтра. если нет удалю
+
+effectLevelPin.addEventListener('mouseup', function (evt) {
+  evt.preventDefault();
+  // подсчет отступа пина от начала линии родителя в %
+  var pinX = Math.floor(effectLevelPin.offsetLeft / effectLevelLine.offsetWidth * 100);
+
+  effectLevel.value = pinX;
 });
 
-// изменяет насыщенность эффекта на изображении
-effectsRadioList.forEach(function (effectInput) {
-  effectLevelValue.addEventListener('change', function () {
-    if (effectInput.value === 'chrome') {
-      imagePreview.style.filter = 'grayscale(0%)';
-    } else if (effectInput.value === 'sepia') {
-      imagePreview.style.filter = 'sepia(0%)';
-    } else if (effectInput.value === 'marvin') {
-      imagePreview.style.filter = 'invert(0%)';
-    } else if (effectInput.value === 'phobos') {
-      imagePreview.style.filter = 'blur(0px)';
-    } else if (effectInput.value === 'heat') {
-      imagePreview.style.filter = 'brightness(1%)';
-    } else {
-      imagePreview.style.filter = '';
+//    Для эффекта «Хром» — filter: grayscale(0..1);
+//    Для эффекта «Сепия» — filter: sepia(0..1);
+//    Для эффекта «Марвин» — filter: invert(0..100%);
+//    Для эффекта «Фобос» — filter: blur(0..3px);
+//    Для эффекта «Зной» — filter: brightness(1..3).
+
+effectLevel.addEventListener('change', function (evt) {
+  for (var i = 0; i < effectsRadioList.length; i++) {
+    if (effectsRadioList[i].checked.className === 'effect__preview--chrome') {
+      imagePreview.style.filter = 'grayscale(' + evt.target.value / 100 + ')';
+    } else if (effectsRadioList[i].checked.className === 'effect__preview--sepia') {
+      imagePreview.style.filter = 'sepia(' + evt.target.value / 100 + ')';
+    } else if (effectsRadioList[i].checked.className === 'effect__preview--marvin') {
+      imagePreview.style.filter = 'invert(' + evt.target.value / 100 + '%)';
+    } else if (effectsRadioList[i].checked.className === 'effect__preview--phobos') {
+      imagePreview.style.filter = 'blur(' + Math.floor(evt.target.value / 33) + 'px)';
+    } else if (effectsRadioList[i].checked.className === 'effect__preview--heat') {
+      imagePreview.style.filter = 'brightness(' + Math.floor(evt.target.value / 33) + ')';
     }
-  });
+  }
 });
