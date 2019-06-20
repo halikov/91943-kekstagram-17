@@ -66,6 +66,8 @@ var renderPhotosList = function () {
 
 renderPhotosList();
 
+var ESC_KEYCODE = 27;
+// var ENTER_KEYCODE = 13;
 var uploadFile = document.querySelector('#upload-file');
 var imageEditorForm = document.querySelector('.img-upload__overlay');
 var cancelUploadFile = document.querySelector('#upload-cancel');
@@ -73,97 +75,118 @@ var imagePreview = document.querySelector('.img-upload__preview');
 var imageToEdit = imagePreview.querySelector('img');
 var effects = document.querySelector('.effects');
 
+// дэфолтные значения редактора изображения
+var editorFormOnDefault = function () {
+  document.querySelector('.img-upload__preview').style = '';
+  document.querySelector('.img-upload__preview img').className = '';
+  document.querySelector('.img-upload__effect-level').classList.add('hidden');
+};
+
 // открытие формы редактора
-var onUploadChange = function () {
+var openUploadForm = function () {
   imageEditorForm.classList.remove('hidden');
+  document.addEventListener('keydown', onFormEscPress);
+  editorFormOnDefault();
 };
 
 // закрытие формы редактора
-var onFormClose = function () {
+var closeUploadForm = function () {
   imageEditorForm.classList.add('hidden');
-  // удаляет выбранный эффект к картинке
-  effects.removeEventListener('click', onEffectChange);
+  document.removeEventListener('keydown', onFormEscPress);
+  document.removeEventListener('click', onEffectChange);
+};
+
+// нажатие на esc кнопку закрытие формы
+var onFormEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closeUploadForm();
+  }
 };
 
 // listener для открытия формы редактора
-uploadFile.addEventListener('change', onUploadChange);
+uploadFile.addEventListener('change', openUploadForm);
 
 // listener Для зактрытия формы редактора
-cancelUploadFile.addEventListener('click', onFormClose);
+cancelUploadFile.addEventListener('click', closeUploadForm);
 
 // scale transform to image
 var scale = document.querySelector('.scale');
 var scaleQuantity = scale.querySelector('.scale__control--value');
-var minValue = 0;
+// var minValue = 0;
 var maxValue = 100;
 var valueStep = 25;
 
 var onScaleClick = function (evt) {
   var lvlScale = parseInt(scaleQuantity.value, 10);
+  var minScale = 25;
+  var maxScale = 100;
+
   if (evt.target.classList.contains('scale__control--bigger')) {
-    if (lvlScale >= minValue && lvlScale < maxValue) {
+    if (lvlScale >= minScale && lvlScale < maxScale) {
       lvlScale += valueStep;
     }
   } else if (evt.target.classList.contains('scale__control--smaller')) {
-    if (lvlScale > minValue && lvlScale <= maxValue) {
+    if (lvlScale > minScale && lvlScale <= maxScale) {
       lvlScale -= valueStep;
     }
   }
+
   scaleQuantity.value = lvlScale + '%';
-  imageToEdit.style.transform = 'scale(' + lvlScale / 100 + ')';
+  imagePreview.style.transform = 'scale(' + lvlScale / 100 + ')';
 };
 
-scale.addEventListener('click', onScaleClick);
-
 // накладывает эфект на изображение
-
 var effectLevelWrapper = document.querySelector('.img-upload__effect-level');
 var effectLevelPin = document.querySelector('.effect-level__pin');
 var effectLevelLine = document.querySelector('.effect-level__line');
 var effectLevel = document.querySelector('[name="effect-level"]'); // на случай если понадобится при определении уровней фильтра. если нет удалю
 var effectLevelDepth = document.querySelector('.effect-level__depth');
+var pinOffsetLeft = effectLevelPin.offsetLeft;
+var LEVEL_LINE_WIDTH = effectLevelLine.offsetWidth;
 
 var applyImageFilters = function (value, percent) {
   switch (value) {
     case 'chrome':
       imagePreview.style.filter = 'grayscale(' + 1 / 100 * percent + ')';
-      effectLevelWrapper.style.display = 'block';
       break;
     case 'sepia':
       imagePreview.style.filter = 'sepia(' + 1 / 100 * percent + ')';
-      effectLevelWrapper.style.display = 'block';
       break;
     case 'marvin':
       imagePreview.style.filter = 'invert(' + 1 / 100 * percent + '%)';
-      effectLevelWrapper.style.display = 'block';
       break;
     case 'phobos':
       imagePreview.style.filter = 'blur(' + 3 / 100 * percent + 'px)';
-      effectLevelWrapper.style.display = 'block';
       break;
     case 'heat':
       imagePreview.style.filter = 'brightness(' + 3 / 100 * percent + ')';
-      effectLevelWrapper.style.display = 'block';
       break;
     case 'none':
       imagePreview.style.filter = '';
-      effectLevelWrapper.style.display = 'none';
       break;
   }
 };
 
-effectLevelPin.addEventListener('mouseup', function (evt) {
+var onEffectPinMouseUp = function (evt) {
   evt.preventDefault();
-  // подсчет отступа пина от начала линии родителя в %
-  var pinX = Math.floor(effectLevelPin.offsetLeft / effectLevelLine.offsetWidth * 100);
+  var pinX = Math.floor(pinOffsetLeft / LEVEL_LINE_WIDTH * 100); // подсчет отступа пина от начала линии родителя в %, где 100 = 100%
   effectLevel.value = pinX;
   applyImageFilters(document.querySelector('.effects__radio:checked').value, pinX);
-});
+};
+
+var setEffectLevelDisplay = function (isEffect) {
+  if (isEffect) {
+    effectLevelWrapper.classList.remove('hidden');
+  } else {
+    effectLevelWrapper.classList.add('hidden');
+  }
+};
 
 // формирует название класса картинки для применения эффекта
 var onEffectChange = function (evt) {
   if (evt.target.name === 'effect') {
     imageToEdit.className = 'effects__preview--' + evt.target.value;
+    setEffectLevelDisplay(evt.target.value !== 'none');
     applyImageFilters(evt.target.value, maxValue);
     effectLevel.value = maxValue;
     effectLevelDepth.style.width = maxValue + '%';
@@ -171,4 +194,6 @@ var onEffectChange = function (evt) {
   }
 };
 
+scale.addEventListener('click', onScaleClick);
+effectLevelPin.addEventListener('mouseup', onEffectPinMouseUp);
 effects.addEventListener('change', onEffectChange);
