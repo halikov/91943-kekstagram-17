@@ -98,7 +98,7 @@ var closeUploadForm = function () {
 
 // нажатие на esc кнопку закрытие формы
 var onFormEscPress = function (evt) {
-  if (evt.keyCode === ESC_KEYCODE) {
+  if (evt.keyCode === ESC_KEYCODE && document.activeElement !== document.querySelector('.text__description')) {
     closeUploadForm();
   }
 };
