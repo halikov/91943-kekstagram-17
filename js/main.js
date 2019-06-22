@@ -66,6 +66,9 @@ var renderPhotosList = function () {
 
 renderPhotosList();
 
+//
+// настройка окна редактирования фото
+//
 var ESC_KEYCODE = 27;
 // var ENTER_KEYCODE = 13;
 var uploadFile = document.querySelector('#upload-file');
@@ -74,12 +77,20 @@ var cancelUploadFile = document.querySelector('#upload-cancel');
 var imagePreview = document.querySelector('.img-upload__preview');
 var imageToEdit = imagePreview.querySelector('img');
 var effects = document.querySelector('.effects');
+var textDescription = document.querySelector('.text_description');
+var effectLevelWrapper = document.querySelector('.img-upload__effect-level');
+var effectLevelPin = document.querySelector('.effect-level__pin');
+var effectLevelLine = document.querySelector('.effect-level__line');
+var effectLevel = document.querySelector('[name="effect-level"]');
+var effectLevelDepth = document.querySelector('.effect-level__depth');
+var pinOffsetLeft = effectLevelPin.offsetLeft;
+var LEVEL_LINE_WIDTH = effectLevelLine.offsetWidth;
 
 // дэфолтные значения редактора изображения
 var editorFormOnDefault = function () {
-  document.querySelector('.img-upload__preview').style = '';
-  document.querySelector('.img-upload__preview img').className = '';
-  document.querySelector('.img-upload__effect-level').classList.add('hidden');
+  imagePreview.style = '';
+  imageToEdit.className = '';
+  effectLevelWrapper.classList.add('hidden');
 };
 
 // открытие формы редактора
@@ -98,7 +109,7 @@ var closeUploadForm = function () {
 
 // нажатие на esc кнопку закрытие формы
 var onFormEscPress = function (evt) {
-  if (evt.keyCode === ESC_KEYCODE && document.activeElement !== document.querySelector('.text__description')) {
+  if (evt.keyCode === ESC_KEYCODE && document.activeElement !== textDescription) {
     closeUploadForm();
   }
 };
@@ -136,13 +147,6 @@ var onScaleClick = function (evt) {
 };
 
 // накладывает эфект на изображение
-var effectLevelWrapper = document.querySelector('.img-upload__effect-level');
-var effectLevelPin = document.querySelector('.effect-level__pin');
-var effectLevelLine = document.querySelector('.effect-level__line');
-var effectLevel = document.querySelector('[name="effect-level"]'); // на случай если понадобится при определении уровней фильтра. если нет удалю
-var effectLevelDepth = document.querySelector('.effect-level__depth');
-var pinOffsetLeft = effectLevelPin.offsetLeft;
-var LEVEL_LINE_WIDTH = effectLevelLine.offsetWidth;
 
 var applyImageFilters = function (value, percent) {
   switch (value) {
