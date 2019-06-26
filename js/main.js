@@ -83,7 +83,7 @@ var effectLevelPin = document.querySelector('.effect-level__pin');
 var effectLevelLine = document.querySelector('.effect-level__line');
 var effectLevel = document.querySelector('[name="effect-level"]');
 var effectLevelDepth = document.querySelector('.effect-level__depth');
-var pinOffsetLeft = effectLevelPin.offsetLeft;
+// var pinOffsetLeft = effectLevelPin.offsetLeft;
 var LEVEL_LINE_WIDTH = effectLevelLine.offsetWidth;
 
 // дэфолтные значения редактора изображения
@@ -104,7 +104,7 @@ var openUploadForm = function () {
 var closeUploadForm = function () {
   imageEditorForm.classList.add('hidden');
   document.removeEventListener('keydown', onFormEscPress);
-  document.removeEventListener('click', onEffectChange);
+  // document.removeEventListener('click', onEffectChange);
 };
 
 // нажатие на esc кнопку закрытие формы
@@ -171,12 +171,12 @@ var applyImageFilters = function (value, percent) {
   }
 };
 
-var onEffectPinMouseUp = function (evt) {
-  evt.preventDefault();
-  var pinX = Math.floor(pinOffsetLeft / LEVEL_LINE_WIDTH * 100); // подсчет отступа пина от начала линии родителя в %, где 100 = 100%
-  effectLevel.value = pinX;
-  applyImageFilters(document.querySelector('.effects__radio:checked').value, pinX);
-};
+// var onEffectPinMouseUp = function (evt) {
+//   evt.preventDefault();
+//   var pinX = Math.floor(pinOffsetLeft / LEVEL_LINE_WIDTH * 100); // подсчет отступа пина от начала линии родителя в %, где 100 = 100%
+//   effectLevel.value = pinX;
+//   applyImageFilters(document.querySelector('.effects__radio:checked').value, pinX);
+// };
 
 var setEffectLevelDisplay = function (isEffect) {
   if (isEffect) {
@@ -198,6 +198,25 @@ var onEffectChange = function (evt) {
   }
 };
 
+effectLevelPin.addEventListener('mosedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = evt.offsetLeft + effectLevelPin.offsetWidth / 2;
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    var shift = startCoords - moveEvt.offsetLeft;
+    var pinOffset = effectLevelPin.offsetLeft - shift;
+    var pinX = Math.floor(pinOffset / LEVEL_LINE_WIDTH * 100); // подсчет отступа пина от начала линии родителя в %, где 100 = 100%
+    effectLevel.value = pinX;
+    applyImageFilters(document.querySelector('.effects__radio:checked').value, pinX);
+    effectLevelPin.style.left = pinX + '%';
+
+  };
+
+  effectLevelLine.addEventListener('mousemove', onMouseMove);
+});
+
 scale.addEventListener('click', onScaleClick);
-effectLevelPin.addEventListener('mouseup', onEffectPinMouseUp);
+// effectLevelPin.addEventListener('mouseup', onEffectPinMouse);
 effects.addEventListener('change', onEffectChange);
