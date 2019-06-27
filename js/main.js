@@ -183,7 +183,7 @@ var setEffectLevelDisplay = function (isEffect) {
 // формирует название класса картинки для применения эффекта
 var onEffectChange = function (evt) {
   if (evt.target.name === 'effect') {
-    imagePreview.className = 'effects__preview--' + evt.target.value;
+    imagePreview.className = 'img-upload__effect-lavel effects__preview--' + evt.target.value;
     setEffectLevelDisplay(evt.target.value !== 'none');
     applyImageFilters(evt.target.value, maxValue);
     effectLevel.value = maxValue;
