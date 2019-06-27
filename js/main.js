@@ -75,7 +75,7 @@ var uploadFile = document.querySelector('#upload-file');
 var imageEditorForm = document.querySelector('.img-upload__overlay');
 var cancelUploadFile = document.querySelector('#upload-cancel');
 var imagePreview = document.querySelector('.img-upload__preview');
-var imageToEdit = imagePreview.querySelector('img');
+// var imageToEdit = imagePreview.querySelector('img');
 var effects = document.querySelector('.effects');
 var textDescription = document.querySelector('.text_description');
 var effectLevelWrapper = document.querySelector('.img-upload__effect-level');
@@ -85,12 +85,12 @@ var effectLevel = document.querySelector('[name="effect-level"]');
 var effectLevelDepth = document.querySelector('.effect-level__depth');
 // var pinOffsetLeft = effectLevelPin.offsetLeft;
 // var LEVEL_LINE_WIDTH = effectLevelLine.offsetWidth;
-var LEVEL_LINE_WIDTH = 453;
+// var LEVEL_LINE_WIDTH = 453;
 
 // дэфолтные значения редактора изображения
 var editorFormOnDefault = function () {
   imagePreview.style = '';
-  imageToEdit.className = '';
+  imagePreview.className = 'img-upload__effect-level';
   effectLevelWrapper.classList.add('hidden');
 };
 
@@ -158,7 +158,7 @@ var applyImageFilters = function (value, percent) {
       imagePreview.style.filter = 'sepia(' + 1 / 100 * percent + ')';
       break;
     case 'marvin':
-      imagePreview.style.filter = 'invert(' + 1 / 100 * percent + '%)';
+      imagePreview.style.filter = 'invert(' + 1 * percent + '%)';
       break;
     case 'phobos':
       imagePreview.style.filter = 'blur(' + 3 / 100 * percent + 'px)';
@@ -183,7 +183,7 @@ var setEffectLevelDisplay = function (isEffect) {
 // формирует название класса картинки для применения эффекта
 var onEffectChange = function (evt) {
   if (evt.target.name === 'effect') {
-    imageToEdit.className = 'effects__preview--' + evt.target.value;
+    imagePreview.className = 'effects__preview--' + evt.target.value;
     setEffectLevelDisplay(evt.target.value !== 'none');
     applyImageFilters(evt.target.value, maxValue);
     effectLevel.value = maxValue;
@@ -198,7 +198,7 @@ var getX = function (elem) {
 
 var onEffectPinMouseMove = function (moveEvt) {
   var pinOffset = moveEvt.pageX + (effectLevelPin.offsetWidth / 2) - getX(effectLevelLine);
-  var pinX = Math.floor(pinOffset / LEVEL_LINE_WIDTH * 100); // подсчет отступа пина от начала линии родителя в %, где 100 = 100%
+  var pinX = Math.floor(pinOffset / effectLevelLine.offsetWidth * 100); // подсчет отступа пина от начала линии родителя в %, где 100 = 100%
   if (pinX < 0) {
     pinX = 0;
   }
