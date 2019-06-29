@@ -2,14 +2,6 @@
 
 (function () {
 
-  // var getRandom = function (min, max) {
-  //   return Math.floor(Math.random() * (max - min + 1) + min);
-  // };
-
-  // var getRandomIndex = function (someArray) {
-  //   return getRandom(0, (someArray.length - 1));
-  // };
-
   var getComments = function () {
     var names = ['Ivan', 'Marya', 'Mika', 'Яков', 'Анна', 'Соня', 'Федор'];
     var commentTexts = [
@@ -37,11 +29,11 @@
     for (var i = 1; i <= 25; i++) {
       randomUserPhotos.push({
         url: 'photos/' + i + '.jpg',
-        // likes: getRandom(15, 200),
-        likes: window.util.randomNumber(15, 200),
+        likes: window.util.getRandomNumber(15, 200),
         comments: getComments()
       });
     }
+
     return randomUserPhotos;
   };
 
@@ -68,5 +60,4 @@
   };
 
   renderPhotosList();
-
 })();
