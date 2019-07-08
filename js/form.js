@@ -5,7 +5,7 @@
   var imageEditorForm = document.querySelector('.img-upload__overlay');
   var cancelUploadFile = document.querySelector('#upload-cancel');
   var imagePreview = document.querySelector('.img-upload__preview');
-  var textDescription = document.querySelector('.text_description');
+  var textDescription = document.querySelector('.text__description');
   var effectLevelWrapper = document.querySelector('.img-upload__effect-level');
   // дэфолтные значения редактора изображения
   var editorFormOnDefault = function () {
