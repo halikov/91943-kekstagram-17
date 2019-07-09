@@ -13,11 +13,12 @@
   };
 
   var sortByNew = function () {
+    var newPhotosCount = 10;
     var sorted = window.loadedPhotos.slice()
                 .sort(function () {
                   return 0.5 - Math.random();
                 })
-                .slice(0, 10);
+                .slice(0, newPhotosCount);
 
     return sorted;
   };
