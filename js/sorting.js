@@ -12,10 +12,21 @@
     });
   };
 
+  var sortByNew = function () {
+    var sorted = window.loadedPhotos.slice()
+                .sort(function () {
+                  return 0.5 - Math.random();
+                })
+                .slice(0, 10);
+
+    return sorted;
+  };
+
   var sortByComments = function () {
-    var sorted = window.loadedPhotos.slice().sort(function (a, b) {
-      return b.comments.length - a.comments.length;
-    });
+    var sorted = window.loadedPhotos.slice()
+                .sort(function (a, b) {
+                  return b.comments.length - a.comments.length;
+                });
 
     return sorted;
   };
@@ -26,7 +37,7 @@
     currentButton.classList.add('img-filters__button--active');
   };
 
-  var onFilterClick = function (sortButton) {
+  var applySortButton = function (sortButton) {
     var sortedPhotos;
 
     switch (sortButton.id) {
@@ -34,7 +45,7 @@
         sortedPhotos = window.loadedPhotos;
         break;
       case 'filter-new':
-        sortedPhotos = window.loadedPhotos.slice(0, 10);
+        sortedPhotos = sortByNew();
         break;
       case 'filter-discussed':
         sortedPhotos = sortByComments();
@@ -53,7 +64,7 @@
 
   sortButtons.forEach(function (sortButton) {
     sortButton.addEventListener('click', function () {
-      onFilterClick(sortButton);
+      applySortButton(sortButton);
     });
   });
 
