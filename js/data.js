@@ -1,28 +1,17 @@
 'use strict';
 
 (function () {
+  var imgSort = document.querySelector('.img-filters');
+  window.loadedPhotos = [];
 
-  var renderPhotoBlock = function (photoBlock) {
-    var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
-    var pictureElement = pictureTemplate.cloneNode(true);
-    pictureElement.querySelector('.picture__img').src = photoBlock.url;
-    pictureElement.querySelector('.picture__likes').textContent = photoBlock.likes;
-    pictureElement.querySelector('.picture__comments').textContent = photoBlock.comments.length;
-
-    return pictureElement;
+  window.updatePhotos = function () {
+    window.render(window.loadedPhotos);
   };
 
-  var pictureBlock = document.querySelector('.pictures');
-  var onLoad = function (photos) {
-
-    var fragment = document.createDocumentFragment();
-
-    for (var i = 0; i < photos.length; i++) {
-      fragment.appendChild(renderPhotoBlock(photos[i]));
-    }
-
-    pictureBlock.appendChild(fragment);
-
+  var onLoad = function (data) {
+    window.loadedPhotos = data;
+    imgSort.classList.remove('img-filters--inactive');
+    window.render(window.loadedPhotos);
   };
 
   var onError = function (errorMessage) {
