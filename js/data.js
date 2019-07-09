@@ -2,43 +2,16 @@
 
 (function () {
   var imgSort = document.querySelector('.img-filters');
-  var sortPopular = imgSort.querySelector('#filter-popular');
-  var sortNew = imgSort.querySelector('#filter-new');
-  var sortDiscussed = imgSort.querySelector('#filter-discussed');
-  var newPhotoCount = 10;
-  var photos = [];
+  window.loadedPhotos = [];
 
-  // var updatePhotos = function () {
-  //   window.render(photos, count);
-  // };
-
-  var changeSortBtn = function (evt) {
-    if (evt.target === sortNew) {
-      sortPopular.className = 'img-filters__button';
-      sortDiscussed.className = 'img-filters__button';
-      sortNew.className = 'img-filters__button img-filters__button--active';
-      window.render(photos, newPhotoCount);
-    }
-    if (evt.target === sortDiscussed) {
-      sortPopular.className = 'img-filters__button';
-      sortNew.className = 'img-filters__button';
-      sortDiscussed.className = 'img-filters__button img-filters__button--active';
-    }
-    if (evt.target === sortPopular) {
-      sortNew.className = 'img-filters__button';
-      sortDiscussed.className = 'img-filters__button';
-      sortPopular.className = 'img-filters__button img-filters__button--active';
-      window.render(photos, photos.length);
-    }
-    // updatePhotos();
+  window.updatePhotos = function () {
+    window.render(window.loadedPhotos);
   };
 
-  imgSort.addEventListener('click', changeSortBtn);
-
   var onLoad = function (data) {
-    photos = data;
+    window.loadedPhotos = data;
     imgSort.classList.remove('img-filters--inactive');
-    updatePhotos();
+    window.render(window.loadedPhotos);
   };
 
   var onError = function (errorMessage) {
@@ -54,4 +27,5 @@
   };
 
   window.load(onLoad, onError);
+
 })();

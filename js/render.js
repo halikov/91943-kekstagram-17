@@ -12,15 +12,15 @@
     return pictureElement;
   };
 
-  var pictureBlock = document.querySelector('.pictures');
-  window.render = function (data, count) {
+  window.picturesBlock = document.querySelector('.pictures');
+  window.render = function (data) {
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < count; i++) {
+    for (var i = 0; i < data.length; i++) {
       fragment.appendChild(renderPhotoBlock(data[i]));
     }
 
-    pictureBlock.appendChild(fragment);
+    window.picturesBlock.appendChild(fragment);
   };
 
 })();
