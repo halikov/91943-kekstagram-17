@@ -15,7 +15,7 @@
 
     var pictures = document.querySelectorAll('.picture');
     pictures.forEach(function (elem) {
-      elem.addEventListener('click', window.showPicturePreview);
+      elem.addEventListener('click', window.onClickPicturePreview);
     });
   };
 
