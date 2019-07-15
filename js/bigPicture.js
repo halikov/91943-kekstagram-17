@@ -4,11 +4,10 @@
   var bigPicture = document.querySelector('.big-picture');
   // var bigPictureImg = document.querySelector('.big-picture__img img');
   // var likesCount = document.querySelector('.likes-count');
-  // var comments = document.querySelector('.comments-count');
   // var commentsList = document.querySelector('.social__comments');
-  // var description = document.querySelector('.social__caption');
   var commentsCount = document.querySelector('.social__comment-count');
   var commentsLoader = document.querySelector('.comments-loader');
+  // var description = document.querySelector('.social__caption');
   var cancel = bigPicture.querySelector('.cancel');
 
   // функция закрытия превью картинки

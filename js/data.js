@@ -8,6 +8,13 @@
     window.render(window.loadedPhotos);
   };
 
+  var renderPreviewPhoto = function (evt) {
+    document.querySelector('.big-picture__img img').src = evt.target.src;
+    document.querySelector('.likes-count').textContent = evt.target.likes;
+    document.querySelector('.comments-count').textContent = evt.target.comments;
+    document.querySelector('.social__caption').textContent = evt.target.description;
+  };
+
   var onLoad = function (data) {
     window.loadedPhotos = data;
     imgSort.classList.remove('img-filters--inactive');
@@ -17,6 +24,12 @@
     pictures.forEach(function (elem) {
       elem.addEventListener('click', window.onClickPicturePreview);
     });
+
+    pictures.forEach(function (itm) {
+      itm.addEventListener('click', renderPreviewPhoto);
+    });
+
+
   };
 
   var onError = function (errorMessage) {
