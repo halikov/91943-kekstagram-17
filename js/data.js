@@ -9,10 +9,19 @@
   };
 
   var renderPreviewPhoto = function (evt) {
-    document.querySelector('.big-picture__img img').src = evt.target.src;
-    document.querySelector('.likes-count').textContent = evt.target.likes;
-    document.querySelector('.comments-count').textContent = evt.target.comments.length;
-    document.querySelector('.social__caption').textContent = evt.target.description;
+    var likesCount = document.querySelector('.likes-count');
+    var description = document.querySelector('.social__caption');
+    var commentsCount = document.querySelector('.comments-count');
+
+    var currentPhoto = evt.target;
+    document.querySelector('.big-picture__img img').src = currentPhoto.src;
+    window.loadedPhotos.forEach(function (item) {
+      if (currentPhoto.getAttribute('src') === item.url) {
+        likesCount.textContent = item.likes;
+        commentsCount.textContent = item.comments.length;
+        description.textContent = item.description;
+      }
+    });
   };
 
   var onLoad = function (data) {
