@@ -1,24 +1,24 @@
 'use strict';
 
 (function () {
+  // var commentsList = document.querySelectorAll('.social__comment');
+  var commentsContainer = document.querySelector('.social__comments');
 
-  var commentTemplate = document.querySelector('#comment')
-      .content
-      .querySelector('.social__comment');
-  var commentItem = commentTemplate.cloneNode(true);
-  var commentsList = document.querySelectorAll('.social__comment');
-  var commentContainer = document.querySelector('.social__comments');
 
   var createComment = function (comment) {
+    // удаляет комментарии
+    commentsContainer.innerHTML = '';
+
+    var commentTemplate = document.querySelector('#comment').content.querySelector('.social__comment');
+    var commentItem = commentTemplate.cloneNode(true);
+
     commentItem.querySelector('.social__picture').src = comment.avatar;
     commentItem.querySelector('.social__text').textContent = comment.message;
+
+    return commentItem;
   };
 
   window.renderComments = function (comments) {
-    // удаляет коментарии в шаблоне
-    // commentsList.forEach(function (item) {
-    //   commentsContainer.removeChild(item);
-    // });
 
     var fragment = document.createDocumentFragment();
 

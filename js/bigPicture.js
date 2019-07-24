@@ -8,8 +8,6 @@
   // var commentsList = document.querySelectorAll('.social__comment');
   // var commentsContainer = document.querySelector('.social__comments');
 
-
-
   var onClickPhoto = function (evt) {
     var bigPictureImg = document.querySelector('.big-picture__img img');
     var likesCount = document.querySelector('.likes-count');
@@ -35,7 +33,6 @@
     bigPicture.classList.add('hidden');
     document.removeEventListener('keydown', onPreviewEscPress);
     document.removeEventListener('click', onClickPhoto);
-    document.removeEventListener('click', renderComments);
   };
 
   // закрытие превью по нажитию клавиши esc
@@ -52,7 +49,6 @@
     socialCommentCount.classList.add('visually-hidden');
     document.addEventListener('keydown', onPreviewEscPress);
     document.addEventListener('click', onClickPhoto);
-    document.querySelector('click', renderComments);
 
   };
 
