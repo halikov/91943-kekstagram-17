@@ -8,22 +8,6 @@
     window.render(window.loadedPhotos);
   };
 
-  var renderPreviewPhoto = function (evt) {
-    var likesCount = document.querySelector('.likes-count');
-    var description = document.querySelector('.social__caption');
-    var commentsCount = document.querySelector('.comments-count');
-
-    var currentPhoto = evt.target;
-    document.querySelector('.big-picture__img img').src = currentPhoto.src;
-    window.loadedPhotos.forEach(function (item) {
-      if (currentPhoto.getAttribute('src') === item.url) {
-        likesCount.textContent = item.likes;
-        commentsCount.textContent = item.comments.length;
-        description.textContent = item.description;
-      }
-    });
-  };
-
   var onLoad = function (data) {
     window.loadedPhotos = data;
     imgSort.classList.remove('img-filters--inactive');
@@ -32,10 +16,6 @@
     var pictures = document.querySelectorAll('.picture');
     pictures.forEach(function (elem) {
       elem.addEventListener('click', window.onClickPicturePreview);
-    });
-
-    pictures.forEach(function (itm) {
-      itm.addEventListener('click', renderPreviewPhoto);
     });
   };
 
