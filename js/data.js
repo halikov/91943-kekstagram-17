@@ -12,6 +12,11 @@
     window.loadedPhotos = data;
     imgSort.classList.remove('img-filters--inactive');
     window.render(window.loadedPhotos);
+
+    var pictures = document.querySelectorAll('.picture');
+    pictures.forEach(function (elem) {
+      elem.addEventListener('click', window.onClickPicturePreview);
+    });
   };
 
   var onError = function (errorMessage) {
