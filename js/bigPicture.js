@@ -22,8 +22,8 @@
   window.onClickPicturePreview = function (evt) {
 
     bigPicture.classList.remove('hidden');
-    commentsLoader.classList.add('visually-hidden');
-    socialCommentCount.classList.add('visually-hidden');
+    // commentsLoader.classList.add('visually-hidden');
+    // socialCommentCount.classList.add('visually-hidden');
     document.addEventListener('keydown', onPreviewEscPress);
 
     var bigPictureImg = document.querySelector('.big-picture__img img');
