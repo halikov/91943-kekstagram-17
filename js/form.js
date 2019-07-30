@@ -6,7 +6,7 @@
   var cancelUploadFile = document.querySelector('#upload-cancel');
   var imagePreview = document.querySelector('.img-upload__preview');
   var textDescription = document.querySelector('.text__description');
-  var hashtag = document.querySelector('.text__hashtags');
+  var hashtagsInput = document.querySelector('.text__hashtags');
   var effectLevelWrapper = document.querySelector('.img-upload__effect-level');
 
   // дэфолтные значения редактора изображения
@@ -22,8 +22,8 @@
     if (document.activeElement === textDescription) {
       activeInput = textDescription;
     }
-    if (document.activeElement === hashtag) {
-      activeInput = hashtag;
+    if (document.activeElement === hashtagsInput) {
+      activeInput = hashtagsInput;
     }
 
     return activeInput;
@@ -56,9 +56,5 @@
 
   // listener Для зактрытия формы редактора
   cancelUploadFile.addEventListener('click', closeUploadForm);
-
-
-  // валидация хештегов
-  var hashtagPattern = '[#][A-Za-z-А-Яа-я`0-9]';
 
 })();
