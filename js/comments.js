@@ -14,6 +14,7 @@
 
     commentItem.querySelector('.social__picture').src = comment.avatar;
     commentItem.querySelector('.social__text').textContent = comment.message;
+    commentItem.querySelector('.social__picture').alt = comment.name;
 
     return commentItem;
   };

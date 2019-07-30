@@ -6,7 +6,9 @@
   var cancelUploadFile = document.querySelector('#upload-cancel');
   var imagePreview = document.querySelector('.img-upload__preview');
   var textDescription = document.querySelector('.text__description');
+  var hashtag = document.querySelector('.text__hashtags');
   var effectLevelWrapper = document.querySelector('.img-upload__effect-level');
+
   // дэфолтные значения редактора изображения
   var editorFormOnDefault = function () {
     imagePreview.style = '';
@@ -14,9 +16,23 @@
     effectLevelWrapper.classList.add('hidden');
   };
 
+  // возвращает инпут в фокусе
+  var getActiveInput = function () {
+    var activeInput;
+    if (document.activeElement === textDescription) {
+      activeInput = textDescription;
+    }
+    if (document.activeElement === hashtag) {
+      activeInput = hashtag;
+    }
+
+    return activeInput;
+  };
+
+
   // нажатие на esc кнопку закрытие формы
   var onFormEscPress = function (evt) {
-    if (evt.keyCode === window.util.ESC_KEYCODE && document.activeElement !== textDescription) {
+    if (evt.keyCode === window.util.ESC_KEYCODE && document.activeElement !== getActiveInput()) {
       closeUploadForm();
     }
   };
@@ -40,5 +56,9 @@
 
   // listener Для зактрытия формы редактора
   cancelUploadFile.addEventListener('click', closeUploadForm);
+
+
+  // валидация хештегов
+  var hashtagPattern = '[#][A-Za-z-А-Яа-я`0-9]';
 
 })();
