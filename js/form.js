@@ -42,6 +42,7 @@
     imageEditorForm.classList.remove('hidden');
     document.addEventListener('keydown', onFormEscPress);
     editorFormOnDefault();
+    hashtagsInput.addEventListener('change', window.onHashtagValidity);
   };
 
   // закрытие формы редактора
@@ -49,6 +50,7 @@
     imageEditorForm.classList.add('hidden');
     document.removeEventListener('keydown', onFormEscPress);
     document.removeEventListener('click', window.onEffectChange);
+    hashtagsInput.removeEventListener('change', window.onHashtagValidity);
   };
 
   // listener для открытия формы редактора
