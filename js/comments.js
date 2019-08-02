@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  // var commentsList = document.querySelectorAll('.social__comment');
   var commentsContainer = document.querySelector('.social__comments');
 
 
@@ -24,6 +23,10 @@
     var fragment = document.createDocumentFragment();
 
     comments.forEach(function (item) {
+      if (comments.length > 5) {
+        var loadedCount = 0;
+        comments.length = loadedCount;
+      }
       fragment.appendChild(createComment(item));
     });
 

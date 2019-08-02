@@ -8,6 +8,8 @@
   var textDescription = document.querySelector('.text__description');
   var hashtagsInput = document.querySelector('.text__hashtags');
   var effectLevelWrapper = document.querySelector('.img-upload__effect-level');
+  var form = document.querySelector('.img-upload__form');
+
 
   // дэфолтные значения редактора изображения
   var editorFormOnDefault = function () {
@@ -28,7 +30,6 @@
 
     return activeInput;
   };
-
 
   // нажатие на esc кнопку закрытие формы
   var onFormEscPress = function (evt) {
@@ -52,6 +53,17 @@
     document.removeEventListener('click', window.onEffectChange);
     hashtagsInput.removeEventListener('change', window.onHashtagValidity);
   };
+
+  form.addEventListener('submit', function (evt) {
+    window.upload(new FormData(form), function (response) {
+      closeUploadForm();
+      if (!response) {
+        window.onErrorUpload();
+      }
+      window.onSuccessUpload();
+    });
+    evt.preventDefault();
+  });
 
   // listener для открытия формы редактора
   uploadFile.addEventListener('change', openUploadForm);

@@ -1,23 +1,21 @@
 'use strict';
 
 (function () {
-  var URL = 'https://js.dump.academy/kekstagram/data';
-
-  var TIME = 10000;
+  var URL = 'https://js.dump.academy/kekstagram';
   var SUCCESS_CODE = 200;
+  var TIME = 10000; // 10s
 
-  window.load = function (onLoad, onError) {
+  window.upload = function (data, onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
       if (xhr.status === SUCCESS_CODE) {
-        onLoad(xhr.response);
+        onSuccess(xhr.response);
       } else {
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
-
     xhr.addEventListener('error', function () {
       onError('Произошла ошибка соединения');
     });
@@ -25,11 +23,11 @@
     xhr.addEventListener('timeout', function () {
       onError('Запрос не успел выполнться за ' + xhr.timeout + 'мс');
     });
-    xhr.timeout = TIME; // 10s
 
-    xhr.open('GET', URL);
-    xhr.send();
+    xhr.timeout = TIME;
+
+    xhr.open('POST', URL);
+    xhr.send(data);
   };
 
 })();
-

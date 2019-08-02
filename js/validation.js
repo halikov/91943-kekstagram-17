@@ -13,10 +13,10 @@
     });
   };
 
-  //проверка на уникальность
+  // проверка на уникальность
   var isUniqHashtag = function (str) {
     return str.some(function (it, i, arr) {
-      return it === arr[i + 1]
+      return it === arr[i + 1];
     });
   };
 
@@ -54,7 +54,7 @@
     }
 
     if (checkHashtagCount(hashtags)) {
-      validityMessage += 'Хеш-тегов можно записать не больше 5.'
+      validityMessage += 'Хеш-тегов можно записать не больше 5.';
     }
 
     if (isUniqHashtag(hashtags)) {
