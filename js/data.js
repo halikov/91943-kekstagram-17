@@ -31,6 +31,59 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  window.load(onLoad, onError);
+  window.onSuccessUpload = function () {
 
+    var successMessage = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
+    var main = document.querySelector('main');
+    var closeSuccessMessage = successMessage.querySelector('.success__button');
+
+    // функция удаления из main сообщения успешной загрузки
+    var removeSuccessMesage = function () {
+      main.removeChild(successMessage);
+      document.removeEventListener('keydown', onSuccesMessageEscPress);
+    };
+
+    // нажатие на esc кнопку закрытие формы
+    var onSuccesMessageEscPress = function (evt) {
+      if (evt.keyCode === window.util.ESC_KEYCODE) {
+        removeSuccessMesage();
+      }
+    };
+
+    main.appendChild(successMessage);
+    document.addEventListener('keydown', onSuccesMessageEscPress);
+    document.addEventListener('click', function () {
+      removeSuccessMesage();
+    });
+    closeSuccessMessage.addEventListener('click', removeSuccessMesage);
+
+  };
+
+  window.OnErrorUpload = function () {
+    var errorMessage = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+    var main = document.querySelector('main');
+    var closeErrorMessage = errorMessage.querySelector('.error__button');
+
+    // функция удаления из main сообщения успешной загрузки
+    var removeErrorMesage = function () {
+      main.removeChild(errorMessage);
+      document.removeEventListener('keydown', onErrorMessageEscPress);
+    };
+
+    // нажатие на esc кнопку закрытие формы
+    var onErrorMessageEscPress = function (evt) {
+      if (evt.keyCode === window.util.ESC_KEYCODE) {
+        removeErrorMesage();
+      }
+    };
+
+    main.appendChild(errorMessage);
+    document.addEventListener('keydown', onErrorMessageEscPress);
+    document.addEventListener('click', function () {
+      removeErrorMesage();
+    });
+    closeErrorMessage.addEventListener('click', removeErrorMesage);
+  };
+
+  window.load(onLoad, onError);
 })();
