@@ -3,8 +3,11 @@
 (function () {
   var bigPicture = document.querySelector('.big-picture');
   var cancel = bigPicture.querySelector('.cancel');
+<<<<<<< Updated upstream
   var loadMoreButtom = document.querySelector('.comments-loader');
 
+=======
+>>>>>>> Stashed changes
 
   // функция закрытия превью картинки
   var closePreview = function () {
