@@ -3,8 +3,6 @@
 (function () {
   var bigPicture = document.querySelector('.big-picture');
   var cancel = bigPicture.querySelector('.cancel');
-  var loadMoreButtom = document.querySelector('.comments-loader');
-
 
   // функция закрытия превью картинки
   var closePreview = function () {
