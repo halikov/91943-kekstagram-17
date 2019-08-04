@@ -2,55 +2,55 @@
 
 (function () {
   var commentsContainer = document.querySelector('.social__comments');
+  var commentTemplate = document.querySelector('#comment').content.querySelector('.social__comment');
   var loadedCommentsCount = document.querySelector('.comments-shown');
+  var totalCommentsCount = document.querySelector('.comments-count');
   var loadMoreButton = document.querySelector('.comments-loader');
-  window.SHOWN_COMMENTS_COUNT = 5;
-  window.COMMENTS_TO_SHOW = 5;
 
-  window.onLoadMoreButtonClick = function () {
-      window.SHOWN_COMMENTS_COUNT += window.COMMENTS_TO_SHOW;
-  };
+  // var showLoadMoreButton = function (str1, str2) {
+  //   if (str2.length > str1.length) {
+  //     loadMoreButton.classList.remove('hidden');
+  //   } else {
+  //     loadMoreButton.classList.add('hidden');
+  //   }
+  // };
 
-  var createComment = function (comment) {
-    // удаляет комментарии
+  var createComment = function (element) {
+    // очищает контейнер коментариев
     commentsContainer.innerHTML = '';
 
-    var commentTemplate = document.querySelector('#comment').content.querySelector('.social__comment');
+    // клонирует коментарии
     var commentItem = commentTemplate.cloneNode(true);
 
-    commentItem.querySelector('.social__picture').src = comment.avatar;
-    commentItem.querySelector('.social__text').textContent = comment.message;
-    commentItem.querySelector('.social__picture').alt = comment.name;
+    commentItem.querySelector('.social__picture').src = element.avatar;
+    commentItem.querySelector('.social__text').textContent = element.message;
+    commentItem.querySelector('.social__picture').alt = element.name;
 
     return commentItem;
   };
 
-  var showLoadMoreButton = function (arr) {
-    if (arr.length <= window.SHOWN_COMMENTS_COUNT) {
-      loadMoreButton.classList.add('hidden');
-    } else {
-      loadMoreButton.classList.remove('hidden');
-    }
-  };
-
-  window.renderComments = function (comments) {
-
+  var renderComments = function (array) {
     // отрисовывает коментарии
     var fragment = document.createDocumentFragment();
-    comments.slice(0, window.SHOWN_COMMENTS_COUNT).forEach(function (item) {
+    // показывает коментарии в указанном диапозоне
+    array.forEach(function (item) {
       fragment.appendChild(createComment(item));
     });
-    loadedCommentsCount.textContent = comments.length;
 
-    commentsContainer.appendChild(fragment);
+    return fragment;
+  };
 
-    // если количество коментариев больше то показывает кнопку загрузки коментов
-    showLoadMoreButton(comments);
+  window.showComments = function (array, count) {
+    var renderedComments = array.slice(0, count);
+    commentsContainer.appendChild(renderComments(renderedComments));
+    loadedCommentsCount.textContent = renderedComments.length;
+    totalCommentsCount.textContent = array.length;
 
-    if(comments.length >= window.SHOWN_COMMENTS_COUNT) {
-      loadedCommentsCount.textContent = window.SHOWN_COMMENTS_COUNT;
+    if (loadedCommentsCount.textContent < totalCommentsCount.textContent) {
+      loadMoreButton.classList.remove('hidden');
+    } else {
+      loadMoreButton.classList.add('hidden');
     }
-
   };
 
 })();
