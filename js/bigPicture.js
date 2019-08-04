@@ -82,7 +82,7 @@
 
     var onLoadMoreButtonClick = function () {
       shownCommentsCount += COMMENTS_TO_SHOW; // 5+5
-      window.showComments(currentPhotoItem.comments, shownCommentsCount);
+      showComments(currentPhotoItem.comments, shownCommentsCount);
     };
 
     loadMoreButton.addEventListener('click', onLoadMoreButtonClick);
